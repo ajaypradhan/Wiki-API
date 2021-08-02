@@ -22,48 +22,49 @@ const articleSchema = {
 
 const Article = mongoose.model('Article', articleSchema);
 
-//get route, find articles from wikiDB > article collection
-app.get('/articles', function (req, res) {
-    Article.find(function (err, foundArticles) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(foundArticles);
-        }
-    });
-});
-
 app.get('/', function (req, res) {
-    res.send('<h1>Start</h1>');
+    res.send('connected');
 });
 
-//post route, insert new data item in articles collections
-app.post('/articles', function (req, res) {
-    const newArticle = new Article({
-        title: req.body.title,
-        content: req.body.content,
+// Requested targeting all articles
+
+app.route('/articles')
+    .get(function (req, res) {
+        Article.find(function (err, foundArticles) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(foundArticles);
+            }
+        });
+    })
+    .post(function (req, res) {
+        const newArticle = new Article({
+            title: req.body.title,
+            content: req.body.content,
+        });
+
+        newArticle.save(function (err) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send('Successfully Added a new Article');
+            }
+        });
+    })
+    .delete(function (req, res) {
+        Article.deleteMany(function (err) {
+            //delete all the entry
+            if (err) {
+                res.send(err);
+            } else {
+                res.send('Successfully Deleted all articles');
+            }
+        });
     });
 
-    newArticle.save(function (err) {
-        if (err) {
-            res.send(err);
-        } else {
-            res.send('Successfully Added a new Article');
-        }
-    });
-});
+// request targeting specific Article
 
-//delete the entry from collections
-app.delete('/articles', function (req, res) {
-    Article.deleteMany(function (err) {
-        //delete all the entry
-        if (err) {
-            res.send(err);
-        } else {
-            res.send('Successfully Deleted all articles');
-        }
-    });
-});
 
 app.listen(process.env.PORT || 3000, function () {
     console.log('Server Started');
