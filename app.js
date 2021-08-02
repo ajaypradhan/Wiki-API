@@ -93,6 +93,19 @@ app.route('/articles/:articleTitle')
                 }
             }
         );
+    })
+    .patch(function (req, res) {
+        Article.update(
+            { title: req.params.articleTitle },
+            { $set: req.body },
+            function (err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send('done');
+                }
+            }
+        );
     });
 
 app.listen(process.env.PORT || 3000, function () {
