@@ -37,6 +37,22 @@ app.get('/', function (req, res) {
     res.send('<h1>Start</h1>');
 });
 
+//post route, insert new data item in articles collections
+app.post('/articles', function (req, res) {
+    const newArticle = new Article({
+        title: req.body.title,
+        content: req.body.content,
+    });
+
+    newArticle.save(function (err) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send('Successfully Added a new Article');
+        }
+    });
+});
+
 app.listen(process.env.PORT || 3000, function () {
     console.log('Server Started');
 });
