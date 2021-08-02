@@ -53,6 +53,18 @@ app.post('/articles', function (req, res) {
     });
 });
 
+//delete the entry from collections
+app.delete('/articles', function (req, res) {
+    Article.deleteMany(function (err) {
+        //delete all the entry
+        if (err) {
+            res.send(err);
+        } else {
+            res.send('Successfully Deleted all articles');
+        }
+    });
+});
+
 app.listen(process.env.PORT || 3000, function () {
     console.log('Server Started');
 });
