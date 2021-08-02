@@ -21,6 +21,18 @@ const articleSchema = {
 };
 
 const Article = mongoose.model('Article', articleSchema);
+
+//get route, find articles from wikiDB > article collection
+app.get('/articles', function (req, res) {
+    Article.find(function (err, foundArticles) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(foundArticles);
+        }
+    });
+});
+
 app.get('/', function (req, res) {
     res.send('<h1>Start</h1>');
 });
